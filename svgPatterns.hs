@@ -19,18 +19,21 @@ greenPalette n = [(0, 80+i*10, 0) | i <- [0..n] ]
 -- O '$' é uma facilidade sintática que substitui parênteses
 -- O cycle é uma função bacana -- procure saber mais sobre ela :-)
 rgbPalette :: Int -> [(Int,Int,Int)]
-rgbPalette n = take n $ cycle [(255,0,0),(0,255,0),(0,0,255)]
-
-
+rgbPalette n = take n $ cycle (a ++ b ++ c ++ d)
+  where a = [(50+i*10,0,0) | i <- take (round $ ((fromIntegral n)/qtd)) [1,2..]]
+        b = [(0,50+i*10,0) | i <- take (round $ ((fromIntegral n)/qtd)) [1,2..]]
+        c = [(0,0,50+i*10) | i <- take (round $ ((fromIntegral n)/qtd)) [1,2..]]
+        d = [(0,50+i*10,50+i*10) | i <- take (round $ ((fromIntegral n)/qtd)) [1,2..]]
+        qtd = 4
 
 -------------------------------------------------------------------------------
 -- Geração de retângulos em suas posições
 -------------------------------------------------------------------------------
 
 genRectsInLine :: Int -> [Rect]
-genRectsInLine n  = [((m*(w+gap), 0.0), w, h) | m <- [0..fromIntegral (n-1)]]
-  where (w,h) = (50,50)
-        gap = 10
+genRectsInLine n  = [((m*(w+gap), 0.0+m*2), w, h) | m <- [0..fromIntegral (n-1)]]
+  where (w,h) = (20,20)
+        gap = 3
 
 
 -------------------------------------------------------------------------------
@@ -70,9 +73,10 @@ main = do
   writeFile "rects.svg" $ svgstrs
   where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
         svgfigs = svgElements svgRect rects (map svgStyle palette)
-        rects = genRectsInLine nrects
-        palette = rgbPalette nrects
-        nrects = 10
+        rects = genRectsInLine nrects4
+        palette = rgbPalette nrects4
+        nrects4 = truncate $ (fromIntegral nrects)*4
+        nrects = 15
         (w,h) = (1500,500) -- width,height da imagem SVG
 
 
