@@ -11,13 +11,10 @@ faixaIdoso idade =
   else "ND"
 
 classifIdosos :: [(String,Int)] -> [(String,Int,String)]
-classifIdosos ltupla = zipWith (\(x,y) z -> (x,y,z)) ltupla [faixaIdoso (snd x) | x <- ltupla]
+classifIdosos ltupla = [(nome, idade faixaIdoso idade) | (nome, idade <- ltupla)]
 
 classifIdosos' :: [(String,Int)] -> [(String,Int,String)]
 classifIdosos' ltupla = zipWith (\(x,y) z -> (x,y,z)) ltupla (map faixaIdoso (map (\(_,x) -> x) ltupla)) 
-
---juntaTuplas :: (Int, String) -> (Int, String, Int)
---juntaTuplas tupla = (\(x,y) z -> (x,y,z)) tupla 10
 
 strColor :: (Int,Int,Int) -> String
 strColor tuple = (\(x,y,z) -> "rgb(" ++ show x ++ "," ++ show y ++ "," ++ show z ++ ")") tuple
